@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: songforyou
+
+  datasource:
+    url:
+      jdbc:postgresql://localhost:5432/songforyou
+    username: songforyou
+    password: songforyou
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
