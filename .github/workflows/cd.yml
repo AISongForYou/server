@@ -1,0 +1,33 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+          ssh-key: ${{ secrets.PRIVATE_SSH_KEY }}
+
+      - name: Update submodules
+        run: |
+          git config --global url."git@github.com:".insteadOf "https://github.com/"
+          git submodule update --init --recursive
+
+      - name: Build with Gradle
+        run: ./gradlew clean build
+
+      - name: Deploy to Azure VM
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'songforyou'
+          publish-profile: ${{ secrets.AZURE_VM_PUBLISH_PROFILE }}
+          package: '*.jar'
