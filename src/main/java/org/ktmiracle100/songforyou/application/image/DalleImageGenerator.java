@@ -39,7 +39,14 @@ public class DalleImageGenerator implements ImageGenerator {
 
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
 
-        DalleResponse response = restTemplate.postForObject(apiUrl, entity, DalleResponse.class);
+        DalleResponse response;
+
+        try {
+            response = restTemplate.postForObject(apiUrl, entity, DalleResponse.class);
+        } catch (Exception e) {
+            throw new ImageGenerationException();
+        }
+
 
         if (response == null) {
             throw new ImageGenerationException();

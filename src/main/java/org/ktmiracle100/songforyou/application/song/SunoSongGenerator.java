@@ -37,7 +37,12 @@ public class SunoSongGenerator implements SongGenerator {
 
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
 
-        List<Map<String, Object>> responses = restTemplate.postForObject(url, entity, List.class);
+        List<Map<String, Object>> responses;
+        try {
+            responses = restTemplate.postForObject(url, entity, List.class);
+        } catch (Exception e) {
+            throw new SongGenerationException();
+        }
 
         if (responses == null) {
             throw new SongGenerationException();

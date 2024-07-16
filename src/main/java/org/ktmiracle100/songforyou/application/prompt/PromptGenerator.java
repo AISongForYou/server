@@ -1,6 +1,7 @@
 package org.ktmiracle100.songforyou.application.prompt;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,35 +38,47 @@ public class PromptGenerator {
         PromptTemplate promptTemplate = promptTemplateRepository.findRecentByCategory(Category.SONG)
                 .orElseThrow(TemplateNotFoundException::new);
 
-        String prompt = fillTemplate(promptTemplate, request);
+        String business = summary(request.business());
+        String emphasis = summary(request.emphasis());
 
-        if (prompt.length() >= 290) {
-            String newPrompt =
-                    prompt + "\n 위의 내용을 형식은 그대로 두고 각각의 항목을 요약해서 290자 이내로 만들어줘.\n 답변은 위의 형식대로만 줘";
+        GenerateRequest req = request.reset(business, emphasis);
 
-            RestTemplate restTemplate = new RestTemplate();
+        return fillTemplate(promptTemplate, req);
+    }
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-            headers.set("api-key", apiKey);
-
-            Map<String, Object> requestBody = new HashMap<>();
-            requestBody.put("prompt", newPrompt);
-
-            HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
-
-            ResponseEntity<Map> stringResponseEntity = restTemplate.postForEntity(apiUrl, entity,
-                    Map.class);
-            List<Map<String, String>> choices = (List<Map<String, String>>) stringResponseEntity.getBody().get("choices");
-
-            String text = choices.get(0).get("text");
-
-            if (text.length() <= 290) {
-                prompt = text;
-            }
+    private String summary(String sentence) {
+        if (sentence.length() < 50) {
+            return sentence;
         }
 
-        return prompt;
+        String newPrompt = sentence + "\n이 내용 50자 이내로 요약해줘";
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("api-key", apiKey);
+
+        Map<String, Object> requestBody = new HashMap<>();
+        List<Map<String, Object>> messages = new ArrayList<>();
+        Map<String, Object> message = new HashMap<>();
+        message.put("role", "system");
+        message.put("content", newPrompt);
+        messages.add(message);
+        requestBody.put("messages", messages);
+
+        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
+
+        ResponseEntity<Map> stringResponseEntity = restTemplate.postForEntity(apiUrl, entity,
+                Map.class);
+        List<Map<String, Object>> choices = (List<Map<String, Object>>) stringResponseEntity.getBody()
+                .get("choices");
+
+        Map<String, String> responseMessage = (Map<String, String>) choices.get(0)
+                .get("message");
+        String content = responseMessage.get("content");
+        System.out.println(content);
+        return content;
     }
 
     public String generateImagePrompt(GenerateRequest request) {
@@ -73,7 +86,8 @@ public class PromptGenerator {
             return null;
         }
 
-        PromptTemplate promptTemplate = promptTemplateRepository.findRecentByCategory(Category.IMAGE)
+        PromptTemplate promptTemplate = promptTemplateRepository.findRecentByCategory(
+                        Category.IMAGE)
                 .orElseThrow(TemplateNotFoundException::new);
 
         return fillTemplate(promptTemplate, request);
