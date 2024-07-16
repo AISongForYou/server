@@ -3,15 +3,20 @@ spring:
     name: songforyou
 
   datasource:
-    url:
-      jdbc:postgresql://songforyou.postgres.database.azure.com:5432/songforyou
+    url: jdbc:postgresql://songforyou.postgres.database.azure.com:5432/songforyou
     username: laweeaqprv
     password: gRO0R736et0sURF$
     driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:
+      database-platform: org.hibernate.dialect.PostgreSQLDialect
       ddl-auto: update
+
+    properties:
+        hibernate:
+          show_sql: true
+          dialect: org.hibernate.dialect.PostgreSQLDialect
 
 server:
   port: 80
