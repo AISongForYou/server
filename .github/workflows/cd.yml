@@ -16,10 +16,8 @@ jobs:
         with:
           submodules: true
           token: ${{ secrets.PRIVATE_TOKEN }}
-
       - name: Update submodules
         run: |
-          git config --global url."git@github.com:".insteadOf "https://github.com/"
           git pull --recurse-submodules
           git submodule update --init --recursive
 
