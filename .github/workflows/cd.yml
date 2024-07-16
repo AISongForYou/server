@@ -17,6 +17,16 @@ jobs:
           submodules: true
           ssh-key: ${{ secrets.PRIVATE_SSH_KEY }}
 
+      - name: Load SSH agent
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.PRIVATE_SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-agent -a $SSH_AUTH_SOCK > /dev/null
+          ssh-add ~/.ssh/id_rsa    
+
       - name: Update submodules
         run: |
           git config --global url."git@github.com:".insteadOf "https://github.com/"
