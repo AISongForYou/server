@@ -15,6 +15,7 @@ import org.ktmiracle100.songforyou.application.response.TemplateGenerateResponse
 import org.ktmiracle100.songforyou.application.song.SongGenerator;
 import org.ktmiracle100.songforyou.domain.prompt.Category;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -52,5 +53,10 @@ public class SongForYouController {
         TemplateGenerateResponse response = promptGenerator.saveTemplate(request);
 
         return ResponseEntity.created(URI.create("")).body(response);
+    }
+
+    @GetMapping("/health")
+    public ResponseEntity<Void> health() {
+        return ResponseEntity.ok().build();
     }
 }

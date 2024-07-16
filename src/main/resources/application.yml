@@ -4,11 +4,14 @@ spring:
 
   datasource:
     url:
-      jdbc:postgresql://localhost:5432/songforyou
-    username: songforyou
-    password: songforyou
+      jdbc:postgresql://songforyou.postgres.database.azure.com:5432/songforyou
+    username: laweeaqprv
+    password: gRO0R736et0sURF$
     driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:
       ddl-auto: update
+
+server:
+  port: 80

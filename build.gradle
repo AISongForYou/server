@@ -22,11 +22,11 @@ configurations {
 
 azurewebapp {
 	subscription = '9fc53283-827f-4bcb-89b4-e9438ad7b351'
-	resourceGroup = 'team8_AISongForYou'
+	resourceGroup = 'songforyou'
 	appName = 'songforyou'
 	runtime {
 		os = 'Linux'
-		webContainer = 'Tomcat 9.0' // or 'Java SE' if you want to run an executable jar
+		webContainer = 'Java SE' // or 'Java SE' if you want to run an executable jar
 		javaVersion = 'Java 17'
 	}
 }
