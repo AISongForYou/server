@@ -13,7 +13,6 @@ import org.ktmiracle100.songforyou.application.response.ImageResponse;
 import org.ktmiracle100.songforyou.application.response.SongResponse;
 import org.ktmiracle100.songforyou.application.response.TemplateGenerateResponse;
 import org.ktmiracle100.songforyou.application.song.SongGenerator;
-import org.ktmiracle100.songforyou.domain.prompt.Category;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,8 +31,14 @@ public class SongForYouController {
     public ResponseEntity<GenerateResponse> generate(
             @RequestBody GenerateRequest request
     ) {
-        String songPrompt = promptGenerator.generate(request, Category.SONG);
-        String imagePrompt = promptGenerator.generate(request, Category.IMAGE);
+        String songPrompt = promptGenerator.generateSongPrompt(request);
+        String imagePrompt = promptGenerator.generateImagePrompt(request);
+
+        if (imagePrompt == null) {
+            List<SongResponse> songResponses = songGenerator.generateByPrompt(songPrompt);
+            return ResponseEntity.created(URI.create(""))
+                    .body(new GenerateResponse(songResponses, null));
+        }
 
         CompletableFuture<List<SongResponse>> generatedSongs =
                 CompletableFuture.supplyAsync(() -> songGenerator.generateByPrompt(songPrompt));

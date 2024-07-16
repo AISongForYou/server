@@ -1,11 +1,11 @@
 package org.ktmiracle100.songforyou.domain.prompt;
 
-import static org.ktmiracle100.songforyou.domain.prompt.Property.ATMOSPHERE;
+import static org.ktmiracle100.songforyou.domain.prompt.Property.IMAGESTYLE;
 import static org.ktmiracle100.songforyou.domain.prompt.Property.BUSINESS;
 import static org.ktmiracle100.songforyou.domain.prompt.Property.EMPHASIS;
 import static org.ktmiracle100.songforyou.domain.prompt.Property.GENRE;
 import static org.ktmiracle100.songforyou.domain.prompt.Property.PRODUCT;
-import static org.ktmiracle100.songforyou.domain.prompt.Property.WORDS;
+import static org.ktmiracle100.songforyou.domain.prompt.Property.ADDPHRASES;
 
 import java.util.List;
 import lombok.Getter;
@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum Category {
     SONG(List.of(PRODUCT, BUSINESS, EMPHASIS, GENRE)),
-    IMAGE(List.of(PRODUCT, BUSINESS, EMPHASIS, WORDS, ATMOSPHERE));
+    IMAGE(List.of(PRODUCT, BUSINESS, ADDPHRASES, IMAGESTYLE));
 
     private final List<Property> properties;
 }

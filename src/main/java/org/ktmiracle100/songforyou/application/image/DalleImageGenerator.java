@@ -17,10 +17,10 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class DalleImageGenerator implements ImageGenerator {
 
-    @Value("${openai.api-url}")
+    @Value("${openai.dalle.api-url}")
     private String apiUrl;
 
-    @Value("${openai.api-key}")
+    @Value("${openai.dalle.api-key}")
     private String apiKey;
 
     public ImageResponse generateByPrompt(String prompt) {

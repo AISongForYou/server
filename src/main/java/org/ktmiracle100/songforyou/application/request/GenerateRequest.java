@@ -5,8 +5,8 @@ public record GenerateRequest(
         String business,
         String emphasis,
         String genre,
-        String words,
-        String atmosphere
+        String imageStyle,
+        String addPhrases
 ) {
 
 }

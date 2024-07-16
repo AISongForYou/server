@@ -10,8 +10,8 @@ public enum Property {
     BUSINESS("{business}"),
     EMPHASIS("{emphasis}"),
     GENRE("{genre}"),
-    WORDS("{words}"),
-    ATMOSPHERE("{atmosphere}");
+    ADDPHRASES("{addPhrases}"),
+    IMAGESTYLE("{imageStyle}");
 
     private final String value;
 }
