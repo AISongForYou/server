@@ -41,7 +41,7 @@ public class SunoSongGenerator implements SongGenerator {
         try {
             responses = restTemplate.postForObject(url, entity, List.class);
         } catch (Exception e) {
-            throw new SongGenerationException();
+            throw new SongGenerationException(e.getMessage());
         }
 
         if (responses == null) {

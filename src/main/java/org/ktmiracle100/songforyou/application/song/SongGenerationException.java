@@ -13,4 +13,8 @@ public class SongGenerationException extends CustomException {
     public SongGenerationException() {
         super(HTTP_STATUS, MESSAGE);
     }
+
+    public SongGenerationException(String message) {
+        super(HTTP_STATUS, message);
+    }
 }

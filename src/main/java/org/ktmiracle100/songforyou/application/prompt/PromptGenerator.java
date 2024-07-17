@@ -51,7 +51,7 @@ public class PromptGenerator {
             return sentence;
         }
 
-        String newPrompt = sentence + "\n이 내용 50자 이내로 요약해줘";
+        String newPrompt = sentence + "\n이 내용을 명사형으로 끝나게 요약해줘. 50자 이내로 요약해줘";
 
         RestTemplate restTemplate = new RestTemplate();
 

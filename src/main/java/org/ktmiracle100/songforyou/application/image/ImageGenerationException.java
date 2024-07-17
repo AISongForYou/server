@@ -13,4 +13,8 @@ public class ImageGenerationException extends CustomException {
     public ImageGenerationException() {
         super(HTTP_STATUS, MESSAGE);
     }
+
+    public ImageGenerationException(String message) {
+        super(HTTP_STATUS, message);
+    }
 }

@@ -44,7 +44,7 @@ public class DalleImageGenerator implements ImageGenerator {
         try {
             response = restTemplate.postForObject(apiUrl, entity, DalleResponse.class);
         } catch (Exception e) {
-            throw new ImageGenerationException();
+            throw new ImageGenerationException(e.getMessage());
         }
 
 

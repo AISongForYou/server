@@ -2,17 +2,17 @@ spring:
   application:
     name: songforyou
 
-#  datasource:
-#    url: jdbc:postgresql://songforyou.postgres.database.azure.com:5432/songforyou
-#    username: laweeaqprv
-#    password: gRO0R736et0sURF$
-#    driver-class-name: org.postgresql.Driver
-
   datasource:
-    url: jdbc:postgresql://localhost:5432/songforyou
-    username: songforyou
-    password: songforyou
+    url: jdbc:postgresql://songforyou.postgres.database.azure.com:5432/songforyou
+    username: laweeaqprv
+    password: gRO0R736et0sURF$
     driver-class-name: org.postgresql.Driver
+
+#  datasource:
+#    url: jdbc:postgresql://localhost:5432/songforyou
+#    username: songforyou
+#    password: songforyou
+#    driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:
