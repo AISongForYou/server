@@ -5,6 +5,7 @@ public record SongResponse(
         String title,
         String lyric,
         String url,
+        String imgUrl,
         String genre
 ) {
 

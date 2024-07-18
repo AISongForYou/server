@@ -32,23 +32,10 @@ public class SongForYouController {
             @RequestBody GenerateRequest request
     ) {
         String songPrompt = promptGenerator.generateSongPrompt(request);
-        String imagePrompt = promptGenerator.generateImagePrompt(request);
 
-        if (imagePrompt == null) {
-            List<SongResponse> songResponses = songGenerator.generateByPrompt(songPrompt);
-            return ResponseEntity.created(URI.create(""))
-                    .body(new GenerateResponse(songResponses, null));
-        }
-
-        CompletableFuture<List<SongResponse>> generatedSongs =
-                CompletableFuture.supplyAsync(() -> songGenerator.generateByPrompt(songPrompt));
-        CompletableFuture<ImageResponse> generatedImage =
-                CompletableFuture.supplyAsync(() -> imageGenerator.generateByPrompt(imagePrompt));
-
-        CompletableFuture<GenerateResponse> response =
-                generatedSongs.thenCombine(generatedImage, GenerateResponse::new);
-
-        return ResponseEntity.created(URI.create("")).body(response.join());
+        List<SongResponse> songResponses = songGenerator.generateByPrompt(songPrompt);
+        return ResponseEntity.created(URI.create(""))
+                .body(new GenerateResponse(songResponses));
     }
 
     @PostMapping("/generate/prompts/templates")
