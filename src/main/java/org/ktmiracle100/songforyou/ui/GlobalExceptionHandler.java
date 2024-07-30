@@ -2,6 +2,8 @@ package org.ktmiracle100.songforyou.ui;
 
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
+import org.ktmiracle100.songforyou.application.response.ErrorResponse;
+import org.ktmiracle100.songforyou.domain.CustomException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

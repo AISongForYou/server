@@ -1,8 +1,8 @@
 package org.ktmiracle100.songforyou.application.image;
 
-import org.ktmiracle100.songforyou.application.response.ImageResponse;
+import org.ktmiracle100.songforyou.domain.image.Image;
 
 public interface ImageGenerator {
 
-    ImageResponse generateByPrompt(String prompt);
+    Image generateByPrompt(String prompt);
 }

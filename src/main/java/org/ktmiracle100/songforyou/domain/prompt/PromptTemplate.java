@@ -4,31 +4,41 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import java.util.Map;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.ktmiracle100.songforyou.domain.BaseEntity;
 
 @Accessors(fluent = true)
 @Getter
+@AllArgsConstructor
+@RequiredArgsConstructor
 @Entity
 public class PromptTemplate extends BaseEntity {
 
-    @Column
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Category category;
+    private Media media;
 
-    @Column
-    private String text;
+    @Column(nullable = false)
+    private String template;
 
-    public PromptTemplate() {
+    public String fillTemplate(Map<String, Object> values) {
+        String filledTemplate = this.template;
+
+        for (PromptProperty promptProperty : media.promptProperties()) {
+            filledTemplate = filledTemplate.replace(
+                    promptProperty.getValue(),
+                    String.valueOf(values.get(promptProperty.name()))
+            );
+        }
+
+        return filledTemplate;
     }
 
-    public PromptTemplate(Category category, String text) {
-        this.category = category;
-        this.text = text;
-    }
-
-    public void updateText(String text) {
-        this.text = text;
+    public void updateTemplate(String template) {
+        this.template = template;
     }
 }

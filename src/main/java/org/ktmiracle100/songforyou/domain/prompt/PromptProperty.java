@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum Property {
+public enum PromptProperty {
     PRODUCT("{product}"),
     BUSINESS("{business}"),
     EMPHASIS("{emphasis}"),

@@ -1,8 +1,8 @@
 package org.ktmiracle100.songforyou.application.request;
 
-public record TemplateGenerateRequest(
+public record TemplateSaveRequest(
         String category,
-        String text
+        String template
 ) {
 
 }

@@ -1,4 +1,4 @@
-package org.ktmiracle100.songforyou.ui;
+package org.ktmiracle100.songforyou.domain;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;

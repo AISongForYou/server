@@ -1,7 +1,7 @@
-package org.ktmiracle100.songforyou.application.prompt;
+package org.ktmiracle100.songforyou.domain.prompt;
 
 import lombok.Getter;
-import org.ktmiracle100.songforyou.ui.CustomException;
+import org.ktmiracle100.songforyou.domain.CustomException;
 import org.springframework.http.HttpStatus;
 
 @Getter

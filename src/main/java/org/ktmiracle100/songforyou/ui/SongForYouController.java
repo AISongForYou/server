@@ -4,15 +4,15 @@ import java.net.URI;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import lombok.RequiredArgsConstructor;
-import org.ktmiracle100.songforyou.application.image.ImageGenerator;
-import org.ktmiracle100.songforyou.application.prompt.PromptGenerator;
-import org.ktmiracle100.songforyou.application.request.GenerateRequest;
-import org.ktmiracle100.songforyou.application.request.TemplateGenerateRequest;
-import org.ktmiracle100.songforyou.application.response.GenerateResponse;
+import org.ktmiracle100.songforyou.application.image.ImageService;
+import org.ktmiracle100.songforyou.application.prompt.PromptManager;
+import org.ktmiracle100.songforyou.application.request.MediaGenerateRequest;
+import org.ktmiracle100.songforyou.application.request.TemplateSaveRequest;
 import org.ktmiracle100.songforyou.application.response.ImageResponse;
+import org.ktmiracle100.songforyou.application.response.MediaGenerateResponse;
 import org.ktmiracle100.songforyou.application.response.SongResponse;
-import org.ktmiracle100.songforyou.application.response.TemplateGenerateResponse;
-import org.ktmiracle100.songforyou.application.song.SongGenerator;
+import org.ktmiracle100.songforyou.application.response.TemplateSaveResponse;
+import org.ktmiracle100.songforyou.application.song.SongService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,28 +23,56 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class SongForYouController {
 
-    private final PromptGenerator promptGenerator;
-    private final SongGenerator songGenerator;
-    private final ImageGenerator imageGenerator;
+    private final PromptManager promptManager;
+    private final SongService songService;
+    private final ImageService imageService;
 
     @PostMapping("/generate")
-    public ResponseEntity<GenerateResponse> generate(
-            @RequestBody GenerateRequest request
+    public ResponseEntity<MediaGenerateResponse> generate(
+            @RequestBody MediaGenerateRequest request
     ) {
-        String songPrompt = promptGenerator.generateSongPrompt(request);
+        String songPrompt = promptManager.generateSongPrompt(request);
 
-        List<SongResponse> songResponses = songGenerator.generateByPrompt(songPrompt);
-        return ResponseEntity.created(URI.create(""))
-                .body(new GenerateResponse(songResponses));
+        return promptManager.generateImagePrompt(request)
+                .map(imagePrompt -> getResponse(songPrompt, imagePrompt))
+                .orElseGet(() -> getResponseWithoutImage(songPrompt));
+    }
+
+    private ResponseEntity<MediaGenerateResponse> getResponseWithoutImage(String songPrompt) {
+        List<SongResponse> songResponses = songService.generateByPrompt(songPrompt);
+
+        String id = songResponses.get(0).id();
+
+        return ResponseEntity.created(URI.create(id))
+                .body(new MediaGenerateResponse(songResponses, null));
+    }
+
+    private ResponseEntity<MediaGenerateResponse> getResponse(
+            String songPrompt,
+            String imagePrompt
+    ) {
+        CompletableFuture<List<SongResponse>> generatedSongs =
+                CompletableFuture.supplyAsync(() -> songService.generateByPrompt(songPrompt));
+        CompletableFuture<ImageResponse> generatedImage =
+                CompletableFuture.supplyAsync(() -> imageService.generateByPrompt(imagePrompt));
+
+        CompletableFuture<MediaGenerateResponse> response =
+                generatedSongs.thenCombine(generatedImage, MediaGenerateResponse::new);
+
+        String id = response.join().songs().get(0).id();
+
+        return ResponseEntity.created(URI.create(id)).body(response.join());
     }
 
     @PostMapping("/generate/prompts/templates")
-    public ResponseEntity<TemplateGenerateResponse> generatePromptsTemplates(
-            @RequestBody TemplateGenerateRequest request
+    public ResponseEntity<TemplateSaveResponse> generatePromptsTemplates(
+            @RequestBody TemplateSaveRequest request
     ) {
-        TemplateGenerateResponse response = promptGenerator.saveTemplate(request);
+        TemplateSaveResponse response = promptManager.saveTemplate(request);
 
-        return ResponseEntity.created(URI.create("")).body(response);
+        String id = response.id().toString();
+
+        return ResponseEntity.created(URI.create(id)).body(response);
     }
 
     @GetMapping("/health")

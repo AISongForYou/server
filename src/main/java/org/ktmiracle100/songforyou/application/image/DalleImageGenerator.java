@@ -3,7 +3,9 @@ package org.ktmiracle100.songforyou.application.image;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
-import org.ktmiracle100.songforyou.application.response.ImageResponse;
+import org.ktmiracle100.songforyou.application.response.DalleResponse;
+import org.ktmiracle100.songforyou.domain.image.Image;
+import org.ktmiracle100.songforyou.domain.image.ImageGenerationException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpEntity;
@@ -23,7 +25,7 @@ public class DalleImageGenerator implements ImageGenerator {
     @Value("${openai.dalle.api-key}")
     private String apiKey;
 
-    public ImageResponse generateByPrompt(String prompt) {
+    public Image generateByPrompt(String prompt) {
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
@@ -47,7 +49,6 @@ public class DalleImageGenerator implements ImageGenerator {
             throw new ImageGenerationException(e.getMessage());
         }
 
-
         if (response == null) {
             throw new ImageGenerationException();
         }
@@ -55,6 +56,6 @@ public class DalleImageGenerator implements ImageGenerator {
         Long id = response.created();
         String url = (String) response.data().get(0).get("url");
 
-        return new ImageResponse(id, url);
+        return new Image(id, url, prompt);
     }
 }
