@@ -1,7 +1,7 @@
-package org.ktmiracle100.songforyou.application.image;
+package org.ktmiracle100.songforyou.domain.image;
 
 import lombok.Getter;
-import org.ktmiracle100.songforyou.ui.CustomException;
+import org.ktmiracle100.songforyou.domain.CustomException;
 import org.springframework.http.HttpStatus;
 
 @Getter

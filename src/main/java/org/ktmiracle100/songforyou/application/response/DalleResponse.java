@@ -1,4 +1,4 @@
-package org.ktmiracle100.songforyou.application.image;
+package org.ktmiracle100.songforyou.application.response;
 
 import java.util.List;
 import java.util.Map;

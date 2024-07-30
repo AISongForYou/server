@@ -1,8 +1,6 @@
 package org.ktmiracle100.songforyou.application.request;
 
-import lombok.Setter;
-
-public record GenerateRequest(
+public record MediaGenerateRequest(
         String product,
         String business,
         String emphasis,
@@ -11,8 +9,8 @@ public record GenerateRequest(
         String addPhrases
 ) {
 
-    public GenerateRequest reset(String business, String emphasis) {
-        return new GenerateRequest(
+    public MediaGenerateRequest reset(String business, String emphasis) {
+        return new MediaGenerateRequest(
                 this.product,
                 business,
                 emphasis,
