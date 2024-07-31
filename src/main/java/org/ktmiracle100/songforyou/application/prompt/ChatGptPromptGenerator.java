@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import lombok.RequiredArgsConstructor;
 import org.ktmiracle100.songforyou.domain.prompt.PromptGenerationException;
 import org.ktmiracle100.songforyou.domain.prompt.PromptTemplate;
@@ -26,11 +27,13 @@ public class ChatGptPromptGenerator implements PromptGenerator {
     private String apiKey;
 
     public String generatePrompt(PromptTemplate promptTemplate, Map<String, Object> values) {
-        String business = summary((String) values.get("BUSINESS"));
-        String emphasis = summary((String) values.get("EMPHASIS"));
+        CompletableFuture<String> business = CompletableFuture.supplyAsync(
+                () -> summary((String) values.get("BUSINESS")));
+        CompletableFuture<String> emphasis = CompletableFuture.supplyAsync(
+                () -> summary((String) values.get("EMPHASIS")));
 
-        values.put("BUSINESS", business);
-        values.put("EMPHASIS", emphasis);
+        values.put("BUSINESS", business.join());
+        values.put("EMPHASIS", emphasis.join());
 
         return promptTemplate.fillTemplate(values);
     }

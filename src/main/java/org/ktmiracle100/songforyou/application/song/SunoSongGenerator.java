@@ -54,6 +54,7 @@ public class SunoSongGenerator implements SongGenerator {
                         (String) response.get("title"),
                         (String) response.get("lyric"),
                         (String) response.get("audio_url"),
+                        (String) response.get("img_url"),
                         (String) response.get("tags"),
                         prompt))
                 .toList();

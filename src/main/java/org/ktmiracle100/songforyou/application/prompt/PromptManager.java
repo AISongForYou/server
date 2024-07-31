@@ -14,9 +14,7 @@ import org.ktmiracle100.songforyou.domain.prompt.PromptTemplate;
 import org.ktmiracle100.songforyou.domain.prompt.PromptTemplateRepository;
 import org.ktmiracle100.songforyou.domain.prompt.TemplateNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
 @RequiredArgsConstructor
 @Service
 public class PromptManager {
@@ -73,6 +71,7 @@ public class PromptManager {
                         () -> promptTemplateRepository.save(new PromptTemplate(media, template)));
 
         promptTemplate.updateTemplate(template);
+
         return TemplateSaveResponse.from(promptTemplate);
     }
 }

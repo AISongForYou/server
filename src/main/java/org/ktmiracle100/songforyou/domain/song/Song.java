@@ -28,6 +28,9 @@ public class Song extends BaseEntity {
     private String url;
 
     @Column(nullable = false)
+    private String imgUrl;
+
+    @Column(nullable = false)
     private String tags;
 
     @Column(nullable = false)
